@@ -1,0 +1,27 @@
+{
+  "name": "ssaptours",
+  "version": "1.0.0",
+  "description": "\"# JS_SERVER_SIDE_APP_PUG\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Murciegalo/JS_SERVER_SIDE_APP_PUG.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Murciegalo/JS_SERVER_SIDE_APP_PUG/issues"
+  },
+  "homepage": "https://github.com/Murciegalo/JS_SERVER_SIDE_APP_PUG#readme",
+  "dependencies": {
+    "concurrently": "^5.2.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
