@@ -1,12 +1,15 @@
 const express = require('express');
-
+// Router
+const indexRoute = require('./routes/index');
+const toursRouter = require('./routes/tour');
 
 const app = express()
 
+// Middlewares
+app.use( express.json() )
 
-
-app.get('/' , ( req , res ) => {
-  return res.status(200).send('hello from the server side')
-})
+// Routes
+app.use( '/' , indexRoute )
+app.use( '/api/v1/tours' , toursRouter )
 
 app.listen(3500 , () => console.log('yes'));
