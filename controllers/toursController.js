@@ -16,7 +16,6 @@ exports.getATour = function( req , res , next) {
 
 
 exports.addATour = function( req , res , next ){
-  console.log(req.body);
   return res.status(200).json({
     status: 'success' ,
     message: 'Tour saved'

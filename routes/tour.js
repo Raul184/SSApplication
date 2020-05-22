@@ -10,27 +10,11 @@ const {
 } = toursController ;
 
 
-// GET all tours
-router.get( '/' , getAllTours );
 
-
-
-// Get 1 tour
-router.get( '/:id' , getATour )
-
-
-
-// ADD a new tour
+router.get( '/' , getAllTours ); 
 router.post( '/' , addATour )
-
-
-
-// Update a tour
+router.get( '/:id' , getATour )
 router.patch( '/:id' , updateATour )
-
-
-
-// Delete a tour
 router.delete( '/:id' , deleteATour )
 
 
