@@ -1,4 +1,4 @@
-"# JS_SERVER_SIDE_APP_PUG" 
+"# JS_SPA_MERN_STACK" 
 FullStack web app to sell adventure tours all over the world
 
 - Node/Express
