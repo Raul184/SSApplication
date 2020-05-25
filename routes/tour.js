@@ -8,14 +8,21 @@ const {
   updateATour ,
   deleteATour ,
   top5 ,
-  getTourStats
+  getTourStats ,
+  getMonthlyToursAccounting
 } = toursController ;
 
 
+// BUSINESS
 // Top 5 
 router.get( '/top-5' , top5 , getAllTours )
 // Get Stats
 router.get( '/stats' , getTourStats )
+// Monthly Check
+router.get( '/monthly-plan/:year' , getMonthlyToursAccounting )
+
+
+// LOGISTIC
 router.get( '/' , getAllTours ); 
 router.post( '/' ,  addATour )
 
