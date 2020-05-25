@@ -7,13 +7,15 @@ const {
   addATour ,
   updateATour ,
   deleteATour ,
-  top5
+  top5 ,
+  getTourStats
 } = toursController ;
 
 
 // Top 5 
 router.get( '/top-5' , top5 , getAllTours )
-
+// Get Stats
+router.get( '/stats' , getTourStats )
 router.get( '/' , getAllTours ); 
 router.post( '/' ,  addATour )
 

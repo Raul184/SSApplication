@@ -1,6 +1,5 @@
 const TourModel = require('../models/tours');
 
-
 // GET Top 5
 exports.top5 = async( req , res, next ) => {
   req.query.limit = '5' ,
@@ -46,7 +45,7 @@ exports.getAllTours = async (req, res, next) => {
 
     // 4 ) Pagination
     const page = req.query.page * 1 || 1
-    const limit = req.query.limit * 1 || 1
+    const limit = req.query.limit * 1 || 9
     const skip = ( page - 1 ) * limit
 
     query = query.skip(skip).limit(limit)
@@ -162,4 +161,41 @@ exports.deleteATour = async ( req , res, next) => {
   }
 }
 
+// =================================================================================
+//                                    AGREGATION PIPELINES
+// =================================================================================
+exports.getTourStats = async ( req , res ) => {
+  try {
+    const stats = await TourModel.aggregate([{
+        $match: { ratingsAverage: { $gte: 4.5 } }
+      },
+      {
+        $group: {
+          _id: { $toUpper: '$difficulty' } ,
+          numTours: { $sum: 1 } ,
+          numRatings: { $sum: '$ratingsQuantity' } ,
+          avgRating: { $avg: '$ratingsAverage' } ,
+          avgPrice: { $avg: '$price' } ,
+          minPrice: { $min: '$price'} ,
+          maxPrice: { $max: '$price'}
+        }
+      }
+      // {
+      //   $sort: { $avgPrice: 1 }
+      // }
+      // {
+      //   $match: { _id: { $ne: 'EASY' }}
+      // }
+    ])
 
+    return res.status(200).json({
+      status: 'success' ,
+      data: {
+        stats
+      }
+    })
+  } 
+  catch (error) {
+    res.status(404).json({ msg: "Not found" })  
+  }
+}
