@@ -53,6 +53,13 @@ const tourSchema = new mongoose.Schema({
   startDates: [ Date ],
 })
 
-const TourModel = mongoose.model('Tour' , tourSchema );
+// PARAMS. Middleware
+// router.param('id' , ( req , res , next , paramVal ) => {
+//   console.log(`Tour id is: ${paramVal}`);
+//   next();
+// })
 
+
+
+const TourModel = mongoose.model('Tour' , tourSchema );
 module.exports = TourModel;

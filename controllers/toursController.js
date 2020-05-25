@@ -1,6 +1,16 @@
 const TourModel = require('../models/tours');
 
 
+// GET Top 5
+exports.top5 = async( req , res, next ) => {
+  req.query.limit = '5' ,
+  req.query.sort = '-ratingsAverage' ,
+  req.query.fields = 'name,price,ratingsAverage,summary,difficulty'
+
+  next();
+}
+
+// GET ALL
 exports.getAllTours = async (req, res, next) => {
   try {
     // 1.a ) Filtering
@@ -65,6 +75,7 @@ exports.getAllTours = async (req, res, next) => {
 }
 
 
+// GET Selected Tour
 exports.getATour = async ( req , res , next) => {
   try {
     const tour = await TourModel.findById( req.params.id ) 
@@ -85,6 +96,7 @@ exports.getATour = async ( req , res , next) => {
 }
 
 
+// CREATE A Tour
 exports.addATour = async ( req , res , next ) => {
   try {
     const newTour = await TourModel.create( req.body )
@@ -105,7 +117,7 @@ exports.addATour = async ( req , res , next ) => {
 }
 
 
-
+// UPDATE A Tour
 exports.updateATour = async ( req , res , next) => {
   try {
     const tour = await TourModel.findByIdAndUpdate( 
@@ -132,7 +144,7 @@ exports.updateATour = async ( req , res , next) => {
 }
 
 
-
+// DELETE 
 exports.deleteATour = async ( req , res, next) => {
   try {
     await TourModel.findByIdAndDelete( req.params.id ) 

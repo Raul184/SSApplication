@@ -6,14 +6,13 @@ const {
   getATour ,
   addATour ,
   updateATour ,
-  deleteATour 
+  deleteATour ,
+  top5
 } = toursController ;
 
-// PARAMS. Middleware
-router.param('id' , ( req , res , next , paramVal ) => {
-  console.log(`Tour id is: ${paramVal}`);
-  next();
-})
+
+// Top 5 
+router.get( '/top-5' , top5 , getAllTours )
 
 router.get( '/' , getAllTours ); 
 router.post( '/' ,  addATour )
