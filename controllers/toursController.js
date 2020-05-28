@@ -1,4 +1,5 @@
 const TourModel = require('../models/tours');
+const AppErrors = require('./../utils/AppErrors');
 
 // GET Top 5
 exports.top5 = async( req , res, next ) => {
@@ -79,6 +80,10 @@ exports.getATour = async ( req , res , next) => {
   try {
     const tour = await TourModel.findById( req.params.id ) 
     
+    if(!tour) return next( 
+      new AppErrors( 'No tour found under that ID' , 404 )
+    )
+
     return res.status(200).json({
       status: 'success' ,
       data: {
@@ -124,9 +129,15 @@ exports.updateATour = async ( req , res , next) => {
       req.body ,
       {
         new: true ,
-        runValidators: true
-      }) 
+        runValidators: true ,
+        context: 'query'
+      }
+    ) 
     
+    if(!tour) return next( 
+      new AppErrors( 'No tour found under that ID' , 404 )
+    )
+
     return res.status(200).json({
       status: 'success' ,
       data: {
@@ -146,8 +157,12 @@ exports.updateATour = async ( req , res , next) => {
 // DELETE 
 exports.deleteATour = async ( req , res, next) => {
   try {
-    await TourModel.findByIdAndDelete( req.params.id ) 
+    const tour = await TourModel.findByIdAndDelete( req.params.id ) 
     
+    if(!tour) return next( 
+      new AppErrors( 'No tour found under that ID' , 404 )
+    )
+
     return res.status(204).json({
       status: 'success' ,
       data: null
