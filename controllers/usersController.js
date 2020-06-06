@@ -1,10 +1,64 @@
 const UserModel = require('./../models/users');
+const AppErrors = require('./../utils/AppErrors');
+
+const filterObj = ( obj , ...args ) => {
+  const nueObj = {}
+  Object.keys(obj).forEach(el => {
+    if(args.includes(el)) nueObj[el] = obj[el]
+  })
+  return nueObj;
+}
+
+// From Own User's Account
+exports.updateMe = async(req, res, next) => {
+  try {
+    const data = filterObj(req.body , 'name' , 'email')
+    console.log(data);
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.user.id ,
+      data,
+      {
+        new: true ,
+        runValidators: true
+      }
+    )
+    return res.status(200).json({
+      status: 'success' ,
+      data: {
+        user: updatedUser
+      }
+    })
+  } 
+  catch (error) {
+    return res.status(500).json({
+      status: 'failed' ,
+      message: error.message
+    })  
+  } 
+ }
+
+exports.deleteMe = async(req, res, next) => {
+  try {
+    await UserModel.findByIdAndUpdate(req.user.id , { active: false })
+
+    return res.status(204).json({
+      status: 'success', 
+      data: null
+    })
+  } 
+  catch (error) {
+    return res.status(500).json({
+      message: 'Sorry ,try again later please'
+    })  
+  }
+}
+
 
 
 // Get ALL Users
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const users = await TourModel.find()
+    const users = await UserModel.find()
     
     return res.status(200).json({
       status: 'success' ,
@@ -25,23 +79,23 @@ exports.getAllUsers = async (req, res, next) => {
 
 exports.get1User = async ( req , res , next) => {
   try {
-    const tour = await TourModel.findById( req.params.id ) 
+    const user = await UserModel.findById( req.params.id ) 
     
-    if(!tour) return next( 
-      new AppErrors( 'No tour found under that ID' , 404 )
+    if(!user) return next( 
+      new AppErrors( 'No user found under that ID' , 404 )
     )
 
     return res.status(200).json({
       status: 'success' ,
       data: {
-        tour
+        user
       }
     })
   } 
   catch (error) {
     return res.status(404).json({
       status: 'failed' ,
-      msg: error
+      msg: error.message
     })  
   }
 }
@@ -71,7 +125,7 @@ exports.add1User = async ( req , res , next ) => {
 // Update 1 User
 exports.update1User = async ( req , res , next) => {
   try {
-    const userUpdated = await TourModel.findByIdAndUpdate( 
+    const userUpdated = await UserModel.findByIdAndUpdate( 
       req.params.id , 
       req.body ,
       {
@@ -104,10 +158,12 @@ exports.update1User = async ( req , res , next) => {
 // Delete 1 User
 exports.delete1User = async ( req , res, next) => {
   try {
-    const deletedUser  = await TourModel.findByIdAndDelete( req.params.id ) 
+    console.log('run');
+
+    const deletedUser  = await UserModel.findByIdAndDelete( req.params.id ) 
     
     if(!deletedUser) return next( 
-      new AppErrors( 'No tour found under that ID' , 404 )
+      new AppErrors( 'No user found under that ID' , 404 )
     )
 
     return res.status(204).json({

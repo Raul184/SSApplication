@@ -78,7 +78,7 @@ exports.getAllTours = async (req, res, next) => {
 // GET Selected Tour
 exports.getATour = async ( req , res , next) => {
   try {
-    const tour = await TourModel.findById( req.params.id ) 
+    const tour = await TourModel.findById( req.params.id )
     
     if(!tour) return next( 
       new AppErrors( 'No tour found under that ID' , 404 )
