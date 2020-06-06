@@ -9,13 +9,23 @@ const {
   add1User ,
   update1User ,
   delete1User ,
-  get1User
+  get1User, 
+  updateMe ,
+  deleteMe
 } = usersController
-const { signup } = authController;
+const { signup , login , forgotPass , resetPass , updatePass , protect} = authController;
 
 
 router.post( '/signup' , signup )
+router.post( '/login' , login )
 
+router.post( '/forgotPass' , forgotPass )
+router.patch( '/resetPass/:token' , resetPass )
+
+// User logged in
+router.patch( '/updateMyPass' , protect , updatePass )
+router.patch( '/updateMe' , protect , updateMe )
+router.delete( '/deleteMe' , protect , deleteMe )
 //  ADMIN 
 router.get('/', getAllUsers );
 router.post('/', add1User );
