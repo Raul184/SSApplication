@@ -1,14 +1,5 @@
-const express = require('express');
-const morgan = require('morgan');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const db = require('./confg/db');
-// Errors
-const AppErrors = require('./utils/AppErrors');
-const globalErrorsHandler = require('./GlobalErrorsHandler/ErrorsHandler');
-// Router
-const toursRouter = require('./routes/tour');
-const usersRouter = require('./routes/user');
-const reviewsRouter = require('./routes/review');
 
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
@@ -16,38 +7,24 @@ process.on('uncaughtException', err => {
   process.exit(1);
 });
 
-dotenv.config({ 
-  path: './config.env'
-})
+dotenv.config({ path: './config.env' });
+const app = require('./app');
 
-// Backend ON
-const app = express()
-db();
+const db = process.env.DATABASE;
 
-// Middlewares 
-if(process.env.NODE_ENV === 'development'){
-  app.use( morgan('dev') )
-}
-app.use( express.json() )                         // req.body
-app.use( express.static(`${__dirname}/public`))   // Serve Static Files
+mongoose
+  .connect(db, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  })
+  .then(() => console.log('DB connection successful!'));
 
-// Routes
-app.use( '/api/v1/tours' , toursRouter )
-app.use( '/api/v1/users' , usersRouter )
-app.use( '/api/v1/reviews' , reviewsRouter )
+const port = process.env.PORT || 3000;
+const server = app.listen(port, () => {
+  console.log(`App running on port ${port}...`);
+});
 
-app.all( '*' , ( req , res , next ) => {
-  next( new AppErrors ('Sorry pal , this address is off the hook' , 404 ))
-})
-
-// Global Error Handler Middleware
-app.use( globalErrorsHandler )
-
-
-const port = process.env.PORT || 3500; 
-app.listen( port , () => console.log( process.env.PORT , process.env.NODE_ENV ));
-
-// Listener
 process.on('unhandledRejection', err => {
   console.log('UNHANDLED REJECTION! 💥 Shutting down...');
   console.log(err.name, err.message);
