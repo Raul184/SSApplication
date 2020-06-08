@@ -33,7 +33,7 @@ const reviewSchema = new mongoose.Schema(
     toObject: { virtuals: true }
   }
 );
-
+// Each combination of tours and users always Unique
 reviewSchema.index({ tour: 1, user: 1 }, { unique: true });
 
 reviewSchema.pre(/^find/, function(next) {
