@@ -32,6 +32,7 @@ exports.getTour = async function(req, res, next) {
       fields: 'review rating user'
     })
     return res.status(200).render('tour' , {
+      title:  `${tour.name}`,
       tour
     })
   } 
