@@ -8,7 +8,7 @@ const {
 // HomePage
 router.get('/', getOverview);
 
-router.get('/tour/:slug', getTour);
+router.get('/tours/:slug', getTour);
 
 
 module.exports = router;
