@@ -1,5 +1,6 @@
 const TourModel = require('../models/tourModel');
 
+
 exports.getOverview = async function(req, res, next) {
   try {
     // Get data
@@ -20,9 +21,6 @@ exports.getOverview = async function(req, res, next) {
   }
 }
 
-
-
-
 exports.getTour = async function(req, res, next) {
   try {
     // Get data for tour 
@@ -41,4 +39,15 @@ exports.getTour = async function(req, res, next) {
       message: error.message
     })  
   }
+}
+
+exports.logUserIn = function(req, res, next) {
+  return res.status(200).render('login', {
+    title:'Log into your account'
+  })
+}
+exports.signUserUp = function(req, res, next) {
+  return res.status(200).render('signup', {
+    title:'Sign up'
+  })
 }
