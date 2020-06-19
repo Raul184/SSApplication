@@ -1,5 +1,18 @@
-const login = (em,pass) => {
-  alert(em,pass)
+const login = async (em,pass) => {
+  try {
+    const user = await axios({
+      method: 'POST',
+      url: '/api/v1/users/login' , 
+      data: {
+        email: em,
+        password: pass
+      }
+    })
+    console.log(user);
+  } 
+  catch (err) {
+    console.log(err.response.data);  
+  }
 }
 
 document.querySelector('.form').addEventListener('submit' , e => {
