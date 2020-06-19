@@ -8,10 +8,16 @@ const login = async (em,pass) => {
         password: pass
       }
     })
-    console.log(user);
+
+    if(user.data.status === 'success'){
+      window.setTimeout(() => {
+        location.assign('/')
+      }, 1000)
+
+    }
   } 
   catch (err) {
-    console.log(err.response.data);  
+    alert(err.response.data.message);  
   }
 }
 

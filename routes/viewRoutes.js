@@ -6,7 +6,12 @@ const {
   logUserIn,
   signUserUp
 } = require('../controllers/viewsController');
+const {
+  isLoggedIn
+} = require('../controllers/authController');
 
+// User logged in?
+router.use(isLoggedIn)
 // HomePage
 router.get('/', getOverview)
 router.get('/tours/:slug', getTour)
