@@ -64,26 +64,31 @@ exports.login = catchAsync(async (req, res, next) => {
   // 3) If everything ok, send token to client
   createSendToken(user, 200, res);
 });
-
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
+// NO errors to be sent from here
+exports.isLoggedIn = async (req, res, next) => {
   if(req.cookies.jwt){
-    // Verify token
-    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
-    // Check user exists
-    const currentUser = await User.findById(decoded.id);
-    if (!currentUser) {
-      return next();
+    try {
+      // Verify token
+      const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
+      // Check user exists
+      const currentUser = await User.findById(decoded.id);
+      if (!currentUser) {
+        return next();
+      }
+      // user changed password after token issued
+      if (currentUser.changedPasswordAfter(decoded.iat)) {
+        return next();
+      }
+      // session control in Pug 
+      res.locals.user = currentUser;
+      return next();  
+    } 
+    catch (error) {
+      return next()
     }
-    // user changed password after token issued
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
-      return next();
-    }
-    // session control in Pug 
-    res.locals.user = currentUser;
-    return next();
   }
   return next();
-});
+};
 
 exports.logout =  (req,res) => {
   res.cookie('jwt' ,'dummy text', {
