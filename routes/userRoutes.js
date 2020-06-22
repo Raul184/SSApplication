@@ -1,33 +1,48 @@
 const express = require('express');
-const userController = require('./../controllers/userController');
-const authController = require('./../controllers/authController');
+const {
+  getMe,
+  updateMe,
+  deleteMe,
+  getUser,
+  createUser,
+  getAllUsers,
+  updateUser,
+  deleteUser
+} = require('./../controllers/userController');
+const {
+  signup,
+  login,
+  forgotPassword,
+  resetPassword,
+  protect,
+  updatePassword,
+  restrictTo,
+  logout
+} = require('./../controllers/authController');
 
 const router = express.Router();
 
-router.post('/signup', authController.signup);
-router.post('/login', authController.login);
-router.post('/forgotPassword', authController.forgotPassword);
-router.patch('/resetPassword/:token', authController.resetPassword);
+router.post('/signup', signup);
+router.post('/login', login);
+router.get('/logout', logout)
+router.post('/forgotPassword', forgotPassword);
+router.patch('/resetPassword/:token', resetPassword);
 
 // Protect all routes after this middleware
-router.use(authController.protect);
+router.use(protect);
 
-router.patch('/updateMyPassword', authController.updatePassword);
-router.get('/me', userController.getMe, userController.getUser);
-router.patch('/updateMe', userController.updateMe);
-router.delete('/deleteMe', userController.deleteMe);
+router.patch('/updateMyPassword', updatePassword);
+router.get('/me', getMe, getUser);
+router.patch('/updateMe', updateMe);
+router.delete('/deleteMe', deleteMe);
 
-router.use(authController.restrictTo('admin'));
+router.use(restrictTo('admin'));
 
-router
-  .route('/')
-  .get(userController.getAllUsers)
-  .post(userController.createUser);
-
-router
-  .route('/:id')
-  .get(userController.getUser)
-  .patch(userController.updateUser)
-  .delete(userController.deleteUser);
+router.get('/' ,getAllUsers)
+router.post('/', createUser);
+  
+router.get('/:id',getUser)
+router.patch('/:id',updateUser)
+router.delete('/:id',deleteUser);
 
 module.exports = router;

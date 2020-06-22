@@ -65,6 +65,34 @@ exports.login = catchAsync(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
+exports.isLoggedIn = catchAsync(async (req, res, next) => {
+  if(req.cookies.jwt){
+    // Verify token
+    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
+    // Check user exists
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return next();
+    }
+    // user changed password after token issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return next();
+    }
+    // session control in Pug 
+    res.locals.user = currentUser;
+    return next();
+  }
+  return next();
+});
+
+exports.logout =  (req,res) => {
+  res.cookie('jwt' ,'dummy text', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  })
+  return res.status(200).json({status: 'success'})
+};
+
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
@@ -123,25 +151,7 @@ exports.restrictTo = (...roles) => {
   };
 };
 
-exports.isLoggedIn = catchAsync(async (req, res, next) => {
-  if(req.cookies.jwt){
-    // Verify token
-    const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
-    // Check user exists
-    const currentUser = await User.findById(decoded.id);
-    if (!currentUser) {
-      return next();
-    }
-    // user changed password after token issued
-    if (currentUser.changedPasswordAfter(decoded.iat)) {
-      return next();
-    }
-    // session control in Pug 
-    res.locals.user = currentUser;
-    return next();
-  }
-  return next();
-});
+
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
