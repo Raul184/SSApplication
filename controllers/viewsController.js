@@ -1,4 +1,5 @@
 const TourModel = require('../models/tourModel');
+const AppError = require('../utils/appError');
 
 
 exports.getOverview = async function(req, res, next) {
@@ -29,6 +30,11 @@ exports.getTour = async function(req, res, next) {
       path: 'reviews' , 
       fields: 'review rating user'
     })
+    if(!tour){
+      return res.status(404).render('error', {
+        error: `Sorry , we don't have any tour under that name`
+      })
+    }
     return res.status(200).render('tour' , {
       title:  `${tour.name}`,
       tour
