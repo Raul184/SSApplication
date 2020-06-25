@@ -25,7 +25,6 @@ export const login = async (em,pass) => {
 }
 
 export const logout = async (em,pass) => {
-  console.log('clicked');
   try {
     const res = await axios({
       method:'GET',

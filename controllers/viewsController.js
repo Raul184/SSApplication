@@ -31,9 +31,7 @@ exports.getTour = async function(req, res, next) {
       fields: 'review rating user'
     })
     if(!tour){
-      return res.status(404).render('error', {
-        error: `Sorry , we don't have any tour under that name`
-      })
+      return next(new AppError('Sorry, no tour registered under that name',404))
     }
     return res.status(200).render('tour' , {
       title:  `${tour.name}`,
@@ -55,5 +53,11 @@ exports.logUserIn = function(req, res, next) {
 exports.signUserUp = function(req, res, next) {
   return res.status(200).render('signup', {
     title:'Sign up'
+  })
+}
+
+exports.getProfile = function(res,res,next){
+  return res.status(200).render('profile', {
+    title: 'Your stuff'
   })
 }
