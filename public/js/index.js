@@ -42,17 +42,24 @@ if(userForm){
 
 if(userPass){
   console.log(userPass);
-  userPass.addEventListener('submit', e => {
+  userPass.addEventListener('submit', async e => {
     e.preventDefault()
     const passwordCurrent = document.getElementById('password-current').value;
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('password-confirm').value;
 
-    if(passwordCurrent.length > 0 && password.length > 0 && passwordConfirm.length > 0){
-      updatePassword({passwordCurrent,password,passwordConfirm});
+    if(
+      passwordCurrent.length > 0 && 
+      password.length > 0 && 
+      passwordConfirm.length > 0)
+      {
+      await updatePassword({passwordCurrent,password,passwordConfirm});
     }
     else{
       showAlert('error', 'Please verify your fill in the info to update')
     }
+    document.getElementById('password-current').value=''
+    document.getElementById('password').value=''
+    document.getElementById('password-confirm').value=''
   })
 }
