@@ -11,7 +11,6 @@ const signToken = id => {
     expiresIn: process.env.JWT_EXPIRES_IN
   });
 };
-
 const createSendToken = (user, statusCode, res) => {
   const token = signToken(user._id);
   const cookieOptions = {
@@ -35,7 +34,6 @@ const createSendToken = (user, statusCode, res) => {
     }
   });
 };
-
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
@@ -46,7 +44,6 @@ exports.signup = catchAsync(async (req, res, next) => {
 
   createSendToken(newUser, 201, res);
 });
-
 exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -89,7 +86,6 @@ exports.isLoggedIn = async (req, res, next) => {
   }
   return next();
 };
-
 exports.logout =  (req,res) => {
   res.cookie('jwt' ,'dummy text', {
     expires: new Date(Date.now() + 10 * 1000),
@@ -97,7 +93,6 @@ exports.logout =  (req,res) => {
   })
   return res.status(200).json({status: 'success'})
 };
-
 exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
@@ -110,16 +105,13 @@ exports.protect = catchAsync(async (req, res, next) => {
   else if(req.cookies.jwt){
     token = req.cookies.jwt
   }
-
   if (!token) {
     return next(
       new AppError('You are not logged in! Please log in to get access.', 401)
     );
   }
-
   // 2) Verification token
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
   if (!currentUser) {
@@ -130,20 +122,16 @@ exports.protect = catchAsync(async (req, res, next) => {
       )
     );
   }
-
   // 4) Check if user changed password after the token was issued
   if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('User recently changed password! Please log in again.', 401)
     );
   }
-
-  // GRANT ACCESS TO PROTECTED ROUTE
   req.user = currentUser;
-  res.locals.user = currentUser;
+  res.locals.user = currentUser; //Pug
   next();
 });
-
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     // roles ['admin', 'lead-guide']. role='user'
@@ -156,9 +144,6 @@ exports.restrictTo = (...roles) => {
     next();
   };
 };
-
-
-
 exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
@@ -199,7 +184,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     );
   }
 });
-
 exports.resetPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on the token
   const hashedToken = crypto
@@ -226,7 +210,6 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   // 4) Log the user in, send JWT
   createSendToken(user, 200, res);
 });
-
 exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
