@@ -1,13 +1,14 @@
 import '@babel/polyfill'
 import {login,logout} from './login'
 import {displayMap} from './mapbox'
-import {updateData} from './updateAccount'
+import {updateData,updatePassword} from './updateAccount'
 import { showAlert } from './alert';
 console.log('Parcel');
 
 const loginForm = document.querySelector('.form--login')
 const logoutBtn = document.querySelector('.nav__el--logout')
 const userForm = document.querySelector('.form-user-data')
+const userPass = document.querySelector('.form-user-password')
 const mapbox = document.getElementById('map')
 if(mapbox){
   const locations = JSON.parse(document.getElementById('map').dataset.locations)
@@ -32,8 +33,26 @@ if(userForm){
     const email = document.getElementById('email').value;
     if(name.length > 0 && email.length > 0){
       updateData(name,email);
-    }else{
-      showAlert('error', 'Please verify your fill in the info want to update')
+    }
+    else{
+      showAlert('error', 'Please verify your fill in the info to update')
+    }
+  })
+}
+
+if(userPass){
+  console.log(userPass);
+  userPass.addEventListener('submit', e => {
+    e.preventDefault()
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+
+    if(passwordCurrent.length > 0 && password.length > 0 && passwordConfirm.length > 0){
+      updatePassword({passwordCurrent,password,passwordConfirm});
+    }
+    else{
+      showAlert('error', 'Please verify your fill in the info to update')
     }
   })
 }

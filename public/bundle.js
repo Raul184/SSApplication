@@ -8520,7 +8520,7 @@ exports.displayMap = displayMap;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.updateData = void 0;
+exports.updatePassword = exports.updateData = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
@@ -8575,6 +8575,47 @@ var updateData = /*#__PURE__*/function () {
 }();
 
 exports.updateData = updateData;
+
+var updatePassword = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(passCurrent, pass, passConfirm) {
+    var res;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            _context2.prev = 0;
+            _context2.next = 3;
+            return _axios.default.patch('/api/v1/users/updateMyPassword', passCurrent, pass, passConfirm);
+
+          case 3:
+            res = _context2.sent;
+
+            if (res.data.status === 'success') {
+              (0, _alert.showAlert)('success', 'Password successfully updated');
+            }
+
+            _context2.next = 10;
+            break;
+
+          case 7:
+            _context2.prev = 7;
+            _context2.t0 = _context2["catch"](0);
+            (0, _alert.showAlert)('error', _context2.t0.response.data.message);
+
+          case 10:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, null, [[0, 7]]);
+  }));
+
+  return function updatePassword(_x3, _x4, _x5) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+
+exports.updatePassword = updatePassword;
 },{"axios":"../../node_modules/axios/index.js","./alert":"alert.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
@@ -8846,6 +8887,7 @@ console.log('Parcel');
 var loginForm = document.querySelector('.form--login');
 var logoutBtn = document.querySelector('.nav__el--logout');
 var userForm = document.querySelector('.form-user-data');
+var userPass = document.querySelector('.form-user-password');
 var mapbox = document.getElementById('map');
 
 if (mapbox) {
@@ -8875,7 +8917,27 @@ if (userForm) {
     if (name.length > 0 && email.length > 0) {
       (0, _updateAccount.updateData)(name, email);
     } else {
-      (0, _alert.showAlert)('error', 'Please verify your fill in the info want to update');
+      (0, _alert.showAlert)('error', 'Please verify your fill in the info to update');
+    }
+  });
+}
+
+if (userPass) {
+  console.log(userPass);
+  userPass.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var passwordCurrent = document.getElementById('password-current').value;
+    var password = document.getElementById('password').value;
+    var passwordConfirm = document.getElementById('password-confirm').value;
+
+    if (passwordCurrent.length > 0 && password.length > 0 && passwordConfirm.length > 0) {
+      (0, _updateAccount.updatePassword)({
+        passwordCurrent: passwordCurrent,
+        password: password,
+        passwordConfirm: passwordConfirm
+      });
+    } else {
+      (0, _alert.showAlert)('error', 'Please verify your fill in the info to update');
     }
   });
 }
