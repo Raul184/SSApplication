@@ -8433,7 +8433,7 @@ var login = /*#__PURE__*/function () {
 exports.login = login;
 
 var logout = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(em, pass) {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
     var res;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
@@ -8465,7 +8465,7 @@ var logout = /*#__PURE__*/function () {
     }, _callee2, null, [[0, 7]]);
   }));
 
-  return function logout(_x3, _x4) {
+  return function logout() {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -9005,7 +9005,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59488" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51618" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

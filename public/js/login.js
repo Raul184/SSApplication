@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {showAlert,hideAlert} from './alert'
+import {showAlert} from './alert'
 export const login = async (em,pass) => {
   try {
     const user = await axios({
@@ -24,7 +24,7 @@ export const login = async (em,pass) => {
   }
 }
 
-export const logout = async (em,pass) => {
+export const logout = async () => {
   try {
     const res = await axios({
       method:'GET',
@@ -36,3 +36,4 @@ export const logout = async (em,pass) => {
     showAlert('error', err.response.data.message);  
   }
 }
+
