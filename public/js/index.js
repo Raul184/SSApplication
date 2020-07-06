@@ -31,8 +31,13 @@ if(userForm){
     e.preventDefault()
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
+    //multipart form data
+    const form = new FormData() 
+    form.append('name', document.getElementById('name').value)
+    form.append('email', document.getElementById('email').value)
+    form.append('photo', document.getElementById('photo').files[0])
     if(name.length > 0 && email.length > 0){
-      updateData(name,email);
+      updateData(form);
     }
     else{
       showAlert('error', 'Please verify your fill in the info to update')

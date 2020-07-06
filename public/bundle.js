@@ -8533,7 +8533,7 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
 var updateData = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(name, email) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
     var res;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
@@ -8541,10 +8541,7 @@ var updateData = /*#__PURE__*/function () {
           case 0:
             _context.prev = 0;
             _context.next = 3;
-            return _axios.default.patch('/api/v1/users/updateMe', {
-              name: name,
-              email: email
-            });
+            return _axios.default.patch('/api/v1/users/updateMe', data);
 
           case 3:
             res = _context.sent;
@@ -8569,7 +8566,7 @@ var updateData = /*#__PURE__*/function () {
     }, _callee, null, [[0, 7]]);
   }));
 
-  return function updateData(_x, _x2) {
+  return function updateData(_x) {
     return _ref.apply(this, arguments);
   };
 }();
@@ -8610,7 +8607,7 @@ var updatePassword = /*#__PURE__*/function () {
     }, _callee2, null, [[0, 7]]);
   }));
 
-  return function updatePassword(_x3, _x4, _x5) {
+  return function updatePassword(_x2, _x3, _x4) {
     return _ref2.apply(this, arguments);
   };
 }();
@@ -8916,10 +8913,15 @@ if (userForm) {
   userForm.addEventListener('submit', function (e) {
     e.preventDefault();
     var name = document.getElementById('name').value;
-    var email = document.getElementById('email').value;
+    var email = document.getElementById('email').value; //multipart form data
+
+    var form = new FormData();
+    form.append('name', document.getElementById('name').value);
+    form.append('email', document.getElementById('email').value);
+    form.append('photo', document.getElementById('photo').files[0]);
 
     if (name.length > 0 && email.length > 0) {
-      (0, _updateAccount.updateData)(name, email);
+      (0, _updateAccount.updateData)(form);
     } else {
       (0, _alert.showAlert)('error', 'Please verify your fill in the info to update');
     }
@@ -9005,7 +9007,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62507" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64254" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
