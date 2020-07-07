@@ -29,19 +29,13 @@ if(logoutBtn){
 if(userForm){
   userForm.addEventListener('submit', e => {
     e.preventDefault()
-    const name = document.getElementById('name').value;
-    const email = document.getElementById('email').value;
     //multipart form data
     const form = new FormData() 
+    console.log(document.getElementById('photo').files[0]);
     form.append('name', document.getElementById('name').value)
     form.append('email', document.getElementById('email').value)
     form.append('photo', document.getElementById('photo').files[0])
-    if(name.length > 0 && email.length > 0){
-      updateData(form);
-    }
-    else{
-      showAlert('error', 'Please verify your fill in the info to update')
-    }
+    updateData(form);
   })
 }
 

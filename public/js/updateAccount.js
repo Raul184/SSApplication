@@ -4,7 +4,6 @@ import {showAlert} from './alert'
 export const updateData = async data => {
   try {
     const res = await axios.patch('/api/v1/users/updateMe', data)
-
     if(res.data.status === 'success'){
       showAlert('success' , 'Account successfully updated')
     }
