@@ -4,6 +4,7 @@ const Tour = require('./../models/tourModel');
 const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
 const AppError = require('./../utils/appError');
+// Images REST
 const multerStorage = multer.memoryStorage()
 const multerFilter = (req,file, cb) => {
   if(file.mimetype.startsWith('image')){
