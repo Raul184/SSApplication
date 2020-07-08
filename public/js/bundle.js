@@ -8893,6 +8893,7 @@ var mapbox = document.getElementById('map');
 
 if (mapbox) {
   var locations = JSON.parse(document.getElementById('map').dataset.locations);
+  console.log(locations);
   (0, _mapbox.displayMap)(locations);
 }
 

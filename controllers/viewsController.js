@@ -24,6 +24,7 @@ exports.getOverview = async function(req, res, next) {
 
 exports.getTour = async function(req, res, next) {
   try {
+    console.log('Params Slug:', req.params)
     // Get data for tour 
     const tour = await TourModel.findOne({ slug: req.params.slug })
     .populate({ 
