@@ -10,6 +10,7 @@ const loginForm = document.querySelector('.form--login')
 const logoutBtn = document.querySelector('.nav__el--logout')
 const userForm = document.querySelector('.form-user-data')
 const userPass = document.querySelector('.form-user-password')
+const bookBtn = document.getElementById('book-tour');
 const mapbox = document.getElementById('map')
 if(mapbox){
   const locations = JSON.parse(document.getElementById('map').dataset.locations)
@@ -59,9 +60,9 @@ if(userPass){
     document.getElementById('password-confirm').value=''
   })
 }
-document.querySelector('.book-tour').addEventListener('click', e => {
-  console.log('clicked');
-  e.target.textContent = 'Processing...'
-  const {tourid} = e.target.dataset
-  bookTour(tourid)
-})
+if (bookBtn)
+  bookBtn.addEventListener('click', e => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
+  });

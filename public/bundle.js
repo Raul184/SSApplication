@@ -9487,6 +9487,7 @@ if (userPass) {
   }());
 }
 
+console.log(document.querySelector('.book-tour'));
 document.querySelector('.book-tour').addEventListener('click', function (e) {
   console.log('clicked');
   e.target.textContent = 'Processing...';
@@ -9521,7 +9522,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53368" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53811" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
