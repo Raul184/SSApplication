@@ -3,6 +3,7 @@ import {login,logout} from './login'
 import {displayMap} from './mapbox'
 import {updateData,updatePassword} from './updateAccount'
 import { showAlert } from './alert';
+import {bookTour} from './stripe'
 console.log('Parcel');
 
 const loginForm = document.querySelector('.form--login')
@@ -25,22 +26,18 @@ if(loginForm){
 if(logoutBtn){
   logoutBtn.addEventListener('click', logout)
 }
-
 if(userForm){
   userForm.addEventListener('submit', e => {
     e.preventDefault()
     //multipart form data
     const form = new FormData() 
-    console.log(document.getElementById('photo').files[0]);
     form.append('name', document.getElementById('name').value)
     form.append('email', document.getElementById('email').value)
     form.append('photo', document.getElementById('photo').files[0])
     updateData(form);
   })
 }
-
 if(userPass){
-  console.log(userPass);
   userPass.addEventListener('submit', async e => {
     e.preventDefault()
     const passwordCurrent = document.getElementById('password-current').value;
@@ -62,3 +59,9 @@ if(userPass){
     document.getElementById('password-confirm').value=''
   })
 }
+document.querySelector('.book-tour').addEventListener('click', e => {
+  console.log('clicked');
+  e.target.textContent = 'Processing...'
+  const {tourid} = e.target.dataset
+  bookTour(tourid)
+})
