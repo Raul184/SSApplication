@@ -10,8 +10,8 @@ const loginForm = document.querySelector('.form--login')
 const logoutBtn = document.querySelector('.nav__el--logout')
 const userForm = document.querySelector('.form-user-data')
 const userPass = document.querySelector('.form-user-password')
-const bookBtn = document.getElementById('book-tour');
 const mapbox = document.getElementById('map')
+const bookBtn = document.getElementById('book-tour')
 if(mapbox){
   const locations = JSON.parse(document.getElementById('map').dataset.locations)
   displayMap(locations)
@@ -66,3 +66,6 @@ if (bookBtn)
     const { tourId } = e.target.dataset;
     bookTour(tourId);
   });
+
+const alertMessage = document.querySelector('body').dataset.alert;
+if (alertMessage) showAlert('success', alertMessage, 20);
