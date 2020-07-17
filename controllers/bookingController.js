@@ -8,7 +8,6 @@ const AppError = require('./../utils/appError')
 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
   // 1) Get the currently booked tour
-  console.log('PARAMS', req.params);
   const tour = await Tour.findById(req.params.tourID);
 
   // 2) Create checkout session
@@ -28,13 +27,13 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
         quantity: 1
       }
     ],
-    // mode:'payment',
-    success_url: `${req.protocol}://${req.get('host')}`,
+    mode:'payment',
+    success_url: `${req.protocol}://${req.get('host')}/`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`
   });
 
   // 3) Create session as response
-  res.status(200).json({
+  return res.status(200).json({
     status: 'success',
     session
   });
