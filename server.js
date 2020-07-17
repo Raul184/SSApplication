@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-
+const enforce = require('express-sslify');
 process.on('uncaughtException', err => {
   console.log('UNCAUGHT EXCEPTION! 💥 Shutting down...');
   console.log(err.name, err.message);
@@ -10,7 +10,7 @@ process.on('uncaughtException', err => {
 dotenv.config({ path: './config.env' });
 
 const app = require('./app');
-
+// app.use( enforce.HTTPS({ trustProtoHeader: true }));
 const db = process.env.DATABASE;
 
 mongoose
