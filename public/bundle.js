@@ -64914,7 +64914,7 @@ var utils = module.exports = {
   /**
    * Outputs a new function with interpolated object property values.
    * Use like so:
-   *   var fn = makeURLInterpolator('some/url/{param1}/{param2}');
+   *   const fn = makeURLInterpolator('some/url/{param1}/{param2}');
    *   fn({ param1: 123, param2: 456 }); // => 'some/url/123/456'
    */
   makeURLInterpolator: function () {
@@ -65656,8 +65656,10 @@ function getRequestOpts(self, requestArgs, spec, overrideData) {
 
 function makeRequest(self, requestArgs, spec, overrideData) {
   return new Promise(function (resolve, reject) {
+    var opts;
+
     try {
-      var opts = getRequestOpts(self, requestArgs, spec, overrideData);
+      opts = getRequestOpts(self, requestArgs, spec, overrideData);
     } catch (err) {
       reject(err);
       return;
@@ -65673,8 +65675,9 @@ function makeRequest(self, requestArgs, spec, overrideData) {
 
     var emptyQuery = Object.keys(opts.queryData).length === 0;
     var path = [opts.requestPath, emptyQuery ? '' : '?', utils.stringifyRequestData(opts.queryData)].join('');
-    var headers = opts.headers,
-        settings = opts.settings;
+    var _opts = opts,
+        headers = _opts.headers,
+        settings = _opts.settings;
 
     self._request(opts.requestMethod, opts.host, path, opts.bodyData, opts.auth, {
       headers: headers,
@@ -66106,10 +66109,28 @@ StripeResource.prototype = {
       });
       res.once('end', function () {
         var headers = res.headers || {}; // NOTE: Stripe responds with lowercase header names/keys.
-        // For convenience, make Request-Id easily accessible on
+        // For convenience, make some headers easily accessible on
         // lastResponse.
 
         res.requestId = headers['request-id'];
+        var stripeAccount = headers['stripe-account'];
+
+        if (stripeAccount) {
+          res.stripeAccount = stripeAccount;
+        }
+
+        var apiVersion = headers['stripe-version'];
+
+        if (apiVersion) {
+          res.apiVersion = apiVersion;
+        }
+
+        var idempotencyKey = headers['idempotency-key'];
+
+        if (idempotencyKey) {
+          res.idempotencyKey = idempotencyKey;
+        }
+
         var requestEndTime = Date.now();
         var requestDurationMs = requestEndTime - req._requestStart;
         var responseEvent = utils.removeNullish({
@@ -66329,7 +66350,7 @@ StripeResource.prototype = {
     var makeRequest = function makeRequest(apiVersion, headers, numRetries) {
       // timeout can be set on a per-request basis. Favor that over the global setting
       var timeout = options.settings && Number.isInteger(options.settings.timeout) && options.settings.timeout >= 0 ? options.settings.timeout : _this4._stripe.getApiField('timeout');
-      var isInsecureConnection = _this4._stripe.getApiField('protocol') == 'http';
+      var isInsecureConnection = _this4._stripe.getApiField('protocol') === 'http';
 
       var agent = _this4._stripe.getApiField('agent');
 
@@ -67595,26 +67616,26 @@ module.exports = {
 };
 },{"./ResourceNamespace":"../../node_modules/stripe/lib/ResourceNamespace.js","./resources/Accounts":"../../node_modules/stripe/lib/resources/Accounts.js","./resources/AccountLinks":"../../node_modules/stripe/lib/resources/AccountLinks.js","./resources/ApplePayDomains":"../../node_modules/stripe/lib/resources/ApplePayDomains.js","./resources/ApplicationFees":"../../node_modules/stripe/lib/resources/ApplicationFees.js","./resources/Balance":"../../node_modules/stripe/lib/resources/Balance.js","./resources/BalanceTransactions":"../../node_modules/stripe/lib/resources/BalanceTransactions.js","./resources/Charges":"../../node_modules/stripe/lib/resources/Charges.js","./resources/CountrySpecs":"../../node_modules/stripe/lib/resources/CountrySpecs.js","./resources/Coupons":"../../node_modules/stripe/lib/resources/Coupons.js","./resources/CreditNotes":"../../node_modules/stripe/lib/resources/CreditNotes.js","./resources/Customers":"../../node_modules/stripe/lib/resources/Customers.js","./resources/Disputes":"../../node_modules/stripe/lib/resources/Disputes.js","./resources/EphemeralKeys":"../../node_modules/stripe/lib/resources/EphemeralKeys.js","./resources/Events":"../../node_modules/stripe/lib/resources/Events.js","./resources/ExchangeRates":"../../node_modules/stripe/lib/resources/ExchangeRates.js","./resources/Files":"../../node_modules/stripe/lib/resources/Files.js","./resources/FileLinks":"../../node_modules/stripe/lib/resources/FileLinks.js","./resources/Invoices":"../../node_modules/stripe/lib/resources/Invoices.js","./resources/InvoiceItems":"../../node_modules/stripe/lib/resources/InvoiceItems.js","./resources/IssuerFraudRecords":"../../node_modules/stripe/lib/resources/IssuerFraudRecords.js","./resources/Mandates":"../../node_modules/stripe/lib/resources/Mandates.js","./resources/OAuth":"../../node_modules/stripe/lib/resources/OAuth.js","./resources/Orders":"../../node_modules/stripe/lib/resources/Orders.js","./resources/OrderReturns":"../../node_modules/stripe/lib/resources/OrderReturns.js","./resources/PaymentIntents":"../../node_modules/stripe/lib/resources/PaymentIntents.js","./resources/PaymentMethods":"../../node_modules/stripe/lib/resources/PaymentMethods.js","./resources/Payouts":"../../node_modules/stripe/lib/resources/Payouts.js","./resources/Plans":"../../node_modules/stripe/lib/resources/Plans.js","./resources/Prices":"../../node_modules/stripe/lib/resources/Prices.js","./resources/Products":"../../node_modules/stripe/lib/resources/Products.js","./resources/Refunds":"../../node_modules/stripe/lib/resources/Refunds.js","./resources/Reviews":"../../node_modules/stripe/lib/resources/Reviews.js","./resources/SetupIntents":"../../node_modules/stripe/lib/resources/SetupIntents.js","./resources/SKUs":"../../node_modules/stripe/lib/resources/SKUs.js","./resources/Sources":"../../node_modules/stripe/lib/resources/Sources.js","./resources/Subscriptions":"../../node_modules/stripe/lib/resources/Subscriptions.js","./resources/SubscriptionItems":"../../node_modules/stripe/lib/resources/SubscriptionItems.js","./resources/SubscriptionSchedules":"../../node_modules/stripe/lib/resources/SubscriptionSchedules.js","./resources/TaxRates":"../../node_modules/stripe/lib/resources/TaxRates.js","./resources/Tokens":"../../node_modules/stripe/lib/resources/Tokens.js","./resources/Topups":"../../node_modules/stripe/lib/resources/Topups.js","./resources/Transfers":"../../node_modules/stripe/lib/resources/Transfers.js","./resources/WebhookEndpoints":"../../node_modules/stripe/lib/resources/WebhookEndpoints.js","./resources/BillingPortal/Sessions":"../../node_modules/stripe/lib/resources/BillingPortal/Sessions.js","./resources/Checkout/Sessions":"../../node_modules/stripe/lib/resources/Checkout/Sessions.js","./resources/Issuing/Authorizations":"../../node_modules/stripe/lib/resources/Issuing/Authorizations.js","./resources/Issuing/Cards":"../../node_modules/stripe/lib/resources/Issuing/Cards.js","./resources/Issuing/Cardholders":"../../node_modules/stripe/lib/resources/Issuing/Cardholders.js","./resources/Issuing/Disputes":"../../node_modules/stripe/lib/resources/Issuing/Disputes.js","./resources/Issuing/Transactions":"../../node_modules/stripe/lib/resources/Issuing/Transactions.js","./resources/Radar/EarlyFraudWarnings":"../../node_modules/stripe/lib/resources/Radar/EarlyFraudWarnings.js","./resources/Radar/ValueLists":"../../node_modules/stripe/lib/resources/Radar/ValueLists.js","./resources/Radar/ValueListItems":"../../node_modules/stripe/lib/resources/Radar/ValueListItems.js","./resources/Reporting/ReportRuns":"../../node_modules/stripe/lib/resources/Reporting/ReportRuns.js","./resources/Reporting/ReportTypes":"../../node_modules/stripe/lib/resources/Reporting/ReportTypes.js","./resources/Sigma/ScheduledQueryRuns":"../../node_modules/stripe/lib/resources/Sigma/ScheduledQueryRuns.js","./resources/Terminal/ConnectionTokens":"../../node_modules/stripe/lib/resources/Terminal/ConnectionTokens.js","./resources/Terminal/Locations":"../../node_modules/stripe/lib/resources/Terminal/Locations.js","./resources/Terminal/Readers":"../../node_modules/stripe/lib/resources/Terminal/Readers.js"}],"../../node_modules/stripe/package.json":[function(require,module,exports) {
 module.exports = {
-  "_from": "stripe",
-  "_id": "stripe@8.69.0",
+  "_from": "stripe@^8.69.0",
+  "_id": "stripe@8.75.0",
   "_inBundle": false,
-  "_integrity": "sha512-RD/oW1cwMBHOYFN5gs8ehbEkMFg8tJPByQzVyibJxng5t6PxsEWtV+p5QM28aoT/XKSA7+EwCcDNmH1uPw4OMg==",
+  "_integrity": "sha512-1k8U6zPFQJTlzj3/RQA+dqRPpfAv0c8xXwgwYbzG3/iLtiG8nCgEMorZW0dK1rr04vZU8G9e1oH/u6i16qUWjg==",
   "_location": "/stripe",
   "_phantomChildren": {},
   "_requested": {
-    "type": "tag",
+    "type": "range",
     "registry": true,
-    "raw": "stripe",
+    "raw": "stripe@^8.69.0",
     "name": "stripe",
     "escapedName": "stripe",
-    "rawSpec": "",
+    "rawSpec": "^8.69.0",
     "saveSpec": null,
-    "fetchSpec": "latest"
+    "fetchSpec": "^8.69.0"
   },
   "_requiredBy": ["#USER", "/"],
-  "_resolved": "https://registry.npmjs.org/stripe/-/stripe-8.69.0.tgz",
-  "_shasum": "80a63fdceba82ef70c4f587d9beec856e9ca859b",
-  "_spec": "stripe",
+  "_resolved": "https://registry.npmjs.org/stripe/-/stripe-8.75.0.tgz",
+  "_shasum": "0aa69f268f07841c4988eca273b460cf922f02b4",
+  "_spec": "stripe@^8.69.0",
   "_where": "C:\\Users\\Raul\\Desktop\\projects\\SSApplication",
   "author": {
     "name": "Stripe",
@@ -67686,7 +67707,7 @@ module.exports = {
     "test-typescript": "tsc --build types/test"
   },
   "types": "types/2020-03-02/index.d.ts",
-  "version": "8.69.0"
+  "version": "8.75.0"
 };
 },{}],"../../node_modules/stripe/lib/Webhooks.js":[function(require,module,exports) {
 var Buffer = require("buffer").Buffer;
@@ -68797,7 +68818,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53641" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58645" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
