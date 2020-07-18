@@ -4,7 +4,7 @@ const User = require('../models/userModel');
 const Booking = require('../models/bookingsModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('./handlerFactory');
-const AppError = require('./../utils/appError')
+// const AppError = require('./../utils/appError')
 
 // STRIPE 
 exports.getCheckoutSession = catchAsync(async (req, res, next) => {
@@ -67,8 +67,8 @@ exports.webhookCheckout = (req, res, next) => {
   res.status(200).json({ received: true });
 };
 
-// exports.createBooking = factory.createOne(Booking);
-// exports.getBooking = factory.getOne(Booking);
-// exports.getAllBookings = factory.getAll(Booking);
-// exports.updateBooking = factory.updateOne(Booking);
-// exports.deleteBooking = factory.deleteOne(Booking);
+exports.createBooking = factory.createOne(Booking);
+exports.getBooking = factory.getOne(Booking);
+exports.getAllBookings = factory.getAll(Booking);
+exports.updateBooking = factory.updateOne(Booking);
+exports.deleteBooking = factory.deleteOne(Booking);
